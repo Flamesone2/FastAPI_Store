@@ -1,7 +1,6 @@
 from fastapi import Depends, HTTPException, status, APIRouter
 from fastapi.security import OAuth2PasswordBearer
 from keycloak import KeycloakOpenID
-from starlette import requests
 from starlette.responses import RedirectResponse
 import requests
 import httpx
@@ -40,7 +39,7 @@ async def login():
         "http://192.168.49.2:30001/realms/myrealm/protocol/openid-connect/auth?"
         "response_type=code&"
         "client_id=fastapi-app&"
-        f"redirect_uri=http://localhost:8000/{settings.api.v1.auth}/callback&"
+        f"redirect_uri=http://localhost:8000/api/v1/auth/callback&"
         "scope=openid"
     )
     print(keycloak_login_url)
@@ -50,7 +49,6 @@ async def login():
 
 @router.get("/callback")
 async def callback(code: str):
-    # Обмен code на токен
     token_url = "http://192.168.49.2:30001/realms/myrealm/protocol/openid-connect/token"
     async with httpx.AsyncClient() as client:
         response = await client.post(
@@ -60,7 +58,7 @@ async def callback(code: str):
                 "client_id": "fastapi-app",
                 "client_secret": "your-client-secret",
                 "code": code,
-                "redirect_uri": "http://localhost:8000/callback",
+                "redirect_uri": "http://localhost:8000/api/v1/auth/callback",
             },
         )
     if response.status_code == 200:
