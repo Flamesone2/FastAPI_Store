@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+  postgres_store:
+    image: postgres:14
+    container_name: postgres_store
+    environment:
+      POSTGRES_DB: store
+      POSTGRES_USER: store_user
+      POSTGRES_PASSWORD: store_password
+    volumes:
+      - ./data:/var/lib/postgresql/data  # Локальная папка для данных
+    ports:
+      - "5433:5432"  # Используем порт 5433, чтобы не конфликтовать с Keycloak
+    restart: always
