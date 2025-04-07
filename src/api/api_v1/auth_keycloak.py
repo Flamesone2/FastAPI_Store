@@ -2,12 +2,11 @@ from fastapi import Depends, HTTPException, status, APIRouter
 from fastapi.security import OAuth2PasswordBearer
 from keycloak import KeycloakOpenID
 from starlette.responses import RedirectResponse
-import requests
 import httpx
 from core.config import settings
 
 router = APIRouter(prefix=settings.api.v1.auth, tags=["Auth"])
-# Настройка Keycloak
+
 keycloak_openid = KeycloakOpenID(
     server_url="http://192.168.49.2:30001/",
     client_id="fastapi-app",
@@ -17,7 +16,6 @@ keycloak_openid = KeycloakOpenID(
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
 
-# Защищённый эндпоинт
 @router.get("/protected")
 async def protected_route(token: str = Depends(oauth2_scheme)):
     try:
@@ -31,10 +29,8 @@ async def protected_route(token: str = Depends(oauth2_scheme)):
         )
 
 
-# Эндпоинт для входа
 @router.get("/login")
 async def login():
-    # URL для входа в Keycloak
     keycloak_login_url = (
         "http://192.168.49.2:30001/realms/myrealm/protocol/openid-connect/auth?"
         "response_type=code&"
