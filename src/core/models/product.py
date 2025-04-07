@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Mapped, mapped_column
 from sqlalchemy import String, Float
 from .base import Base
-from mixins import IdIntPkMixin
+from .mixins import IdIntPkMixin
 
 
 class Product(IdIntPkMixin, Base):
