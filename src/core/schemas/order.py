@@ -21,7 +21,7 @@ class OrderItemRead(OrderItemBase):
 
 
 class OrderBase(BaseModel):
-    user_id: str  # ID пользователя из Keycloak
+    user_id: str
     status: str = "pending"
 
 
