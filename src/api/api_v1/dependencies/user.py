@@ -17,14 +17,6 @@ keycloak_openid = KeycloakOpenID(
 )
 
 
-# async def get_current_user(token: str = Depends(oauth2_scheme)):
-#     try:
-#         userinfo = keycloak_openid.userinfo(token)
-#         return userinfo["sub"]
-#     except Exception:
-#         raise HTTPException(status_code=401, detail="Invalid token")
-
-
 async def get_current_user(token: str = Depends(oauth2_scheme)):
     try:
         header, payload, signature = token.split(".")
