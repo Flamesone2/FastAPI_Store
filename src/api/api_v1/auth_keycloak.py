@@ -13,7 +13,9 @@ keycloak_openid = KeycloakOpenID(
     realm_name="myrealm",
 )
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
+oauth2_scheme = OAuth2PasswordBearer(
+    tokenUrl="http://192.168.49.2:30001/realms/myrealm/protocol/openid-connect/token"
+)
 
 
 @router.get("/protected")
@@ -35,7 +37,7 @@ async def login():
         "http://192.168.49.2:30001/realms/myrealm/protocol/openid-connect/auth?"
         "response_type=code&"
         "client_id=fastapi-app&"
-        f"redirect_uri=http://localhost:8000/api/v1/auth/callback&"
+        f"redirect_uri=http://localhost:8000/docs/oauth2-redirect&"
         "scope=openid"
     )
     print(keycloak_login_url)
@@ -52,9 +54,9 @@ async def callback(code: str):
             data={
                 "grant_type": "authorization_code",
                 "client_id": "fastapi-app",
-                "client_secret": "your-client-secret",
+                "client_secret": "qgbsDp9UmZiH6BgdOdc8xJX866LExQRJ",
                 "code": code,
-                "redirect_uri": "http://localhost:8000/api/v1/auth/callback",
+                "redirect_uri": "http://127.0.0.1:8000/docs/oauth2-redirect",
             },
         )
     if response.status_code == 200:
