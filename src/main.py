@@ -1,9 +1,9 @@
 import uvicorn
 from api import router as api_router
-from fastapi import FastAPI, Depends, HTTPException
+from fastapi import FastAPI
 from fastapi.security import OAuth2PasswordBearer
-from fastapi.openapi.models import OAuthFlows as OAuthFlowsModel
 from fastapi.openapi.utils import get_openapi
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI(
     title="FastAPI Store",
@@ -11,8 +11,18 @@ app = FastAPI(
     version="0.1.0",
 )
 
-# Настройка OAuth2 для Swagger UI
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
+oauth2_scheme = OAuth2PasswordBearer(
+    tokenUrl="http://192.168.49.2:30001/realms/myrealm/protocol/openid-connect/token"
+)
+
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Разрешить все домены (для тестирования)
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 def custom_openapi():
